@@ -5,7 +5,7 @@ import matplotlib.gridspec as gridspec
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
 
-import os
+import os, sys
 import json
 from entrenamiento import entrenamiento_normal, entrenamiento_xor, aplicacion_normal, aplicacion_xor, regenerar_valores
 
@@ -473,7 +473,8 @@ def creacion_GUI():
     ventana_principal.title("Inteligencia Artificial - Perceptron")
     ventana_principal.geometry("1200x800")
     ventana_principal.resizable(False, False)
-    ventana_principal.iconbitmap("Resources/brand_logo.ico")
+    icono_path = resource_path("Resources/brand_logo.ico")
+    ventana_principal.iconbitmap(icono_path)
     ventana_principal.attributes('-topmost', True)
     ventana_principal.lift()
     ventana_principal.grid_columnconfigure(1, weight=1)  # Permite que la columna se expanda
@@ -487,7 +488,8 @@ def creacion_GUI():
     ctk.CTkFrame(master=ventana_principal, width=2, fg_color="#0B2310").grid(row=0, column=1, sticky="ns")
 
     # Creación del logo de la UdeC
-    logo_UdeC = Image.open("Resources/logo_UdeC.png")
+    logo_path = resource_path("Resources/logo_UdeC.png")
+    logo_UdeC = Image.open(logo_path)
     logo_UdeC = ctk.CTkImage(dark_image=logo_UdeC, size=(60, 90))
 
     # Creación del título
@@ -561,10 +563,15 @@ def creacion_pesos():
 
     return pesos_json, graficas_json
 
+def resource_path(relative_path):
+    """Obtiene la ruta absoluta al recurso, maneja el caso de ser ejecutado como un archivo .exe"""
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
 if __name__ == "__main__":
     # Acceso a los archivos de pesos
-    ruta_pesos_json = os.path.join(os.getcwd(), 'Data/pesos.json')
-    ruta_graficas_json = os.path.join(os.getcwd(), 'Data/graficas.json')
+    ruta_pesos_json = resource_path('Data/pesos.json')
+    ruta_graficas_json = resource_path('Data/graficas.json')
     pesos_json = {}
     graficas_json = {}
     # Verificando si el archivo de pesos existe
